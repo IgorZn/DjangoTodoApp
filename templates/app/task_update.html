@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Add new ToDo task{% endblock %}
+{% block title %}Edit your task{% endblock %}
 {% block content %}
 
     <div class="center">
         <form method="post" novalidate class="card">
             {% csrf_token %}
 
-            <h2>Create Task</h2>
+            <h2>Update Task</h2>
             {% for field in form %}
                 {% if field.name == 'completed' %}
                     <p>
