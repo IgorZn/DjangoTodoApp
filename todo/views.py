@@ -12,6 +12,7 @@ from .models import Task
     Use the LoginRequiredMixin class to protect a page.
 """
 
+
 def home(request):
     return render(request, 'home.html')
 
@@ -47,11 +48,20 @@ class TaskList(LoginRequiredMixin, ListView):
     """
     template_name = 'app/task_list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tasks'] = context['tasks'].filter(user=self.request.user)
+        return context
+
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
     context_object_name = 'task'
     template_name = 'app/task_detail.html'
+
+    def get_queryset(self):
+        base_qs = super(TaskDetailView, self).get_queryset()
+        return base_qs.filter(user=self.request.user)
 
 
 class TaskCreateView(LoginRequiredMixin, CreateView):
@@ -95,6 +105,10 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, "The task was updated successfully.")
         return super(TaskUpdateView, self).form_valid(form)
 
+    def get_queryset(self):
+        base_qs = super(TaskUpdateView, self).get_queryset()
+        return base_qs.filter(user=self.request.user)
+
 
 class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
@@ -104,3 +118,7 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request, "The task was delete successfully.")
         return super(TaskUpdateView, self).form_valid(form)
+
+    def get_queryset(self):
+        base_qs = super(TaskDeleteView, self).get_queryset()
+        return base_qs.filter(user=self.request.user)

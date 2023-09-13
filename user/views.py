@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.views.generic.edit import FormView
+from .form import RegisterForm
+from django.contrib.auth import login
 
 """
     Use the LoginView class to create a login page.
@@ -25,3 +28,17 @@ class MyLoginView(LoginView):
 class MyLogoutView(LogoutView):
     template_name = 'users/logout.html'
     next_page = 'login'
+
+
+class RegisterView(FormView):
+    template_name = 'users/register.html'
+    form_class = RegisterForm
+    redirect_authenticated_user = True
+    success_url = reverse_lazy('tasks')
+
+    def form_valid(self, form):
+        user = form.save()
+        if user:
+            login(self.request, user)
+
+        return super(RegisterView, self).form_valid(form)
