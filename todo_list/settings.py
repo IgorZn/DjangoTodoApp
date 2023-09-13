@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     # local
     'todo.apps.TodoConfig',
+    'user.apps.UserConfig'
 
     # 3rd party
 ]
@@ -134,3 +135,6 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'home'

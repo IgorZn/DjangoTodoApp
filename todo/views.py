@@ -4,15 +4,19 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Task
 
+"""
+    Use the LoginRequiredMixin class to protect a page.
+"""
 
 def home(request):
     return render(request, 'home.html')
 
 
-class TaskList(ListView):
+class TaskList(LoginRequiredMixin, ListView):
     """
         - model указывает объекты, из модели которых вы хотите отобразить.
         В этом примере мы используем модель Task. Внутри Django запросит
@@ -44,13 +48,13 @@ class TaskList(ListView):
     template_name = 'app/task_list.html'
 
 
-class TaskDetailView(DetailView):
+class TaskDetailView(LoginRequiredMixin, DetailView):
     model = Task
     context_object_name = 'task'
     template_name = 'app/task_detail.html'
 
 
-class TaskCreateView(CreateView):
+class TaskCreateView(LoginRequiredMixin, CreateView):
     """
     - model указывает класс создаваемого объекта (Задача).
 
@@ -81,7 +85,7 @@ class TaskCreateView(CreateView):
         return super(TaskCreateView, self).form_valid(form)
 
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     fields = ['title', 'description', 'completed']
     template_name = "app/task_update.html"
@@ -92,7 +96,7 @@ class TaskUpdateView(UpdateView):
         return super(TaskUpdateView, self).form_valid(form)
 
 
-class TaskDeleteView(DeleteView):
+class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     template_name = "app/task_delete.html"
     success_url = reverse_lazy('tasks')
