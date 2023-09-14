@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (
     MyLoginView,
     MyLogoutView,
+    MyProfile,
     RegisterView
 )
 
@@ -28,5 +29,6 @@ urlpatterns = [
     path('password-reset-complete/',
          PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
+    path('profile/', MyProfile.as_view(), name='profile')
 
 ]

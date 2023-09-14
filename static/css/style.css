@@ -360,3 +360,8 @@ textarea {
     align-self: center;
   }
 }
+
+.avatar {
+  margin: auto;
+  border-radius: 15%;
+}
